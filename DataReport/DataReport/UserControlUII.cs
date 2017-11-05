@@ -126,6 +126,17 @@ namespace DataReport
 
             first = true;
 
+            adlist.Text = "";
+            videolist.Text = "";
+            ZC.Text = "";
+            HT.Text = "";
+            PSJ.Text = "";
+            ZT.Text = "";
+            ZI.Text = "";
+            PPB.Text = "";
+            PDF.Text = "";
+            getkey.Text = "";
+            getinfo.Text = "";
         }
         public delegate void Delegate_AddResult(string strUrl);//定义输出结果的委托
         public void AddResult(string strUrl)
@@ -212,5 +223,25 @@ namespace DataReport
         {
 
         }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void adlist_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void vd_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+
+
     }
 }

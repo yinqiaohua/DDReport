@@ -124,6 +124,7 @@ public class main : IAutoTamper
     }
     public void AutoTamperResponseBefore(Session oSession)
     {
+        
         /*在这编写响应之前需要执行的code */
         if (ui.ReportEnabled.Checked)
         {
@@ -155,7 +156,177 @@ public class main : IAutoTamper
     }
     public void AutoTamperResponseAfter(Session oSession)
     {
-         
+      
+        //选择代理什么域名
+        bool flagSwitch = false;
+        if (ui.vi.Checked && (!ui.vd.Checked))
+        {
+            flagSwitch = oSession.HostnameIs("vi.l.qq.com");
+        }
+        if ((!ui.vi.Checked) && ui.vd.Checked)
+        {
+            flagSwitch = oSession.HostnameIs("vd.l.qq.com");
+        }
+        if(ui.vi.Checked && ui.vd.Checked)
+        {
+            flagSwitch = oSession.HostnameIs("vi.l.qq.com") || oSession.HostnameIs("vd.l.qq.com");
+        }
+        //
+        if (flagSwitch && (oSession.uriContains("proxyhttp"))&&oSession.HTTPMethodIs("POST"))
+        {
+            string adadress = "";
+            string videoadress = "";
+            string keyadress = "";
+            string infoadress = "";
+            if (oSession.GetRequestBodyAsString().IndexOf("ad_type=LD") != -1)
+            {
+                adadress = ui.adlist.Text.ToString();
+                videoadress = ui.videolist.Text.ToString();
+            }
+            else if (oSession.GetRequestBodyAsString().IndexOf("ad_type=ZC") != -1)
+            {
+                adadress = ui.ZC.Text.ToString();
+            }
+            else if (oSession.GetRequestBodyAsString().IndexOf("ad_type=HT") != -1)
+            {
+                adadress = ui.HT.Text.ToString();
+            }
+            else if (oSession.GetRequestBodyAsString().IndexOf("ad_type=PSJ") != -1)
+            {
+                adadress = ui.PSJ.Text.ToString();
+            }
+            else if (oSession.GetRequestBodyAsString().IndexOf("ad_type=ZT") != -1)
+            {
+                adadress = ui.ZT.Text.ToString();
+            }
+            else if (oSession.GetRequestBodyAsString().IndexOf("ad_type=ZI") != -1)
+            {
+                adadress = ui.ZI.Text.ToString();
+            }
+            else if (oSession.GetRequestBodyAsString().IndexOf("ad_type=PPB") != -1)
+            {
+                adadress = ui.PPB.Text.ToString();
+            }
+            else if (oSession.GetRequestBodyAsString().IndexOf("ad_type=PDF") != -1)
+            {
+                adadress = ui.PDF.Text.ToString();
+            }
+            else if (oSession.GetRequestBodyAsString().IndexOf("onlyvkey") != -1)
+            {
+                keyadress = ui.getkey.Text.ToString();
+            }
+            else if (oSession.GetRequestBodyAsString().IndexOf("onlyvinfo") != -1)
+            {
+                infoadress = ui.getinfo.Text.ToString();
+ 
+            }
+            else
+            {
+                adadress = "";
+                videoadress = "";
+                keyadress = "";
+                infoadress = "";
+            }
+
+            string videooBody = "";
+            string adoBody = "";
+            string keyBody = "";
+            string infoBody = "";
+
+            if (adadress != "" && (adadress != "remove") && (adadress != "none"))
+            {
+                adoBody = File.ReadAllText(adadress);
+            }
+            if (videoadress != "" && (videoadress != "remove") && (videoadress != "none"))
+            {
+                videooBody = File.ReadAllText(videoadress);
+            }
+            if (keyadress != "" && (keyadress != "remove")&&(keyadress!="none"))
+            {
+                keyBody = File.ReadAllText(keyadress);
+            }
+            if (infoadress != "" && (infoadress != "remove") && (infoadress != "none"))
+            {
+                infoBody = File.ReadAllText(infoadress);
+            }
+            if (oSession.oResponse.headers.HTTPResponseCode == 200 )
+            {
+                string allBody = oSession.GetResponseBodyAsString();
+                JObject responseObject = (JObject)JsonConvert.DeserializeObject(allBody);//转换成json格式
+                if (responseObject.Property("vinfo") != null && (videoadress != "") && (videoadress != "remove") && (videoadress != "none"))
+                {
+                    responseObject["vinfo"] = videooBody;
+                }
+                if (responseObject.Property("ad") != null && (adadress != "") && (adadress != "remove")&&(adadress!="none"))
+                {
+                    responseObject["ad"] = adoBody;
+                }
+                if (responseObject.Property("vkey") != null && (keyadress != "") && (keyadress != "remove")&&(keyadress!="none"))
+                {
+                    responseObject["vkey"] = keyBody;
+                }
+                if (responseObject.Property("vinfo") != null && (infoadress != "") && (infoadress != "remove") && (infoadress != "none"))
+                {
+                    responseObject["vinfo"] = infoBody;
+                }
+
+
+                if (responseObject.Property("vinfo") != null && (videoadress != "") && (videoadress == "remove"))
+                {
+                    responseObject.Property("vinfo").Remove();
+
+                }
+                if (responseObject.Property("vinfo") != null && (videoadress != "") && (videoadress == "none"))
+                {
+                    responseObject.Property("vinfo").Remove();
+                    if (responseObject.Property("errCode") != null)
+                        responseObject.Property("errCode").Remove();
+                }
+
+
+                if (responseObject.Property("ad") != null && (adadress != "") && (adadress == "remove"))
+                {
+                    responseObject.Property("ad").Remove();
+                }
+                if (responseObject.Property("ad") != null && (adadress != "") && (adadress == "none"))
+                {
+                    responseObject.Property("ad").Remove();
+                    if (responseObject.Property("errCode") != null)
+                        responseObject.Property("errCode").Remove();
+                }
+
+                
+                if (responseObject.Property("vkey") != null && (keyadress != "") && (keyadress == "remove"))
+                {
+                    responseObject.Property("vkey").Remove();
+                }
+                if (responseObject.Property("vkey") != null && (keyadress != "") && (keyadress == "none"))
+                {
+                    responseObject.Property("vkey").Remove();
+                    if (responseObject.Property("errCode") != null)
+                        responseObject.Property("errCode").Remove();
+ 
+                }
+
+                if (responseObject.Property("vinfo") != null && (infoadress != "") && (infoadress == "remove"))
+                {
+                    responseObject.Property("vinfo").Remove();
+                }
+                if (responseObject.Property("vinfo") != null && (infoadress != "") && (infoadress == "none"))
+                {
+                    responseObject.Property("vinfo").Remove();
+                    if (responseObject.Property("errCode") != null)
+                        responseObject.Property("errCode").Remove();
+
+                }
+
+                string newres = responseObject.ToString();
+                oSession.utilReplaceInResponse(allBody, newres);
+            }
+
+        }
+        
+        
         /*在这编写响应之后需要执行的code */
 
         if (ui.ReportEnabled.Checked)
@@ -189,6 +360,20 @@ public class main : IAutoTamper
     public void OnBeforeReturningError(Session oSession)
     {
         /*在这编写有错误返回时需要执行的code */
+    }
+
+    bool changead(Session oSession, string ads)
+    {
+        byte[] jsonByte = oSession.ResponseBody;//获取的是已byte为单位的字符串
+        //string jsonString = System.Text.Encoding.Default.GetString(jsonByte);
+        string jsonString = System.Text.Encoding.UTF8.GetString(jsonByte);//此处直接用Dafault会出现中文乱码，要用UTF8编码
+
+        JObject responseObject = (JObject)JsonConvert.DeserializeObject(jsonString);//转换成json格式 
+        //responseObject["ad"] = ads;
+        //将getinfo的字段值提取出来
+        oSession.utilReplaceInResponse(responseObject["ad"].ToString(), ads);
+        return true;
+ 
     }
     private bool isChar(string str)//判断是否是字符
     {
@@ -1809,8 +1994,8 @@ public class main : IAutoTamper
     private void checkPCH5Post(Session oSession)
     {
 
-        //getinfo
-        if (oSession.HostnameIs("vv.video.qq.com")&&oSession.uriContains("getinfo"))
+        //getinfo。isHLS=0限定为是mp4格式
+        if (oSession.HostnameIs("vv.video.qq.com") && oSession.uriContains("getinfo") )
         {
             ui.requesFlag[0] = true;
             oSessionList.Add(oSession);
@@ -1865,7 +2050,7 @@ public class main : IAutoTamper
             JObject JviObj = (JObject)(Jvi[0]);
 
 
-            if (((JObject)(JviObj["cl"])).Property("fc") != null && ((JObject)(JviObj["cl"])).Property("fc").ToString() != "")
+            if (JviObj.Property("cl")!=null&&((JObject)(JviObj["cl"])).Property("fc") != null && ((JObject)(JviObj["cl"])).Property("fc").ToString() != "")
             {
                 ui.clip = JviObj["cl"]["fc"].ToString();
             }

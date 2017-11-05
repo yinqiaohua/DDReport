@@ -39,3 +39,15 @@ F:\DataReport\DataReport\obj\Debug\DataReport.dll
 F:\DataReport\DataReport\obj\Debug\DataReport.pdb
 F:\DataReport\DataReport\obj\Debug\DataReport.UserControlUII.resources
 E:\DataReport\DataReport\obj\Debug\DataReport.UserControlUII.resources
+D:\VSproject\DataReport\DataReport\bin\Debug\DataReport.dll
+D:\VSproject\DataReport\DataReport\bin\Debug\DataReport.pdb
+D:\VSproject\DataReport\DataReport\bin\Debug\Fiddler.exe
+D:\VSproject\DataReport\DataReport\bin\Debug\Newtonsoft.Json.dll
+D:\VSproject\DataReport\DataReport\bin\Debug\Newtonsoft.Json.pdb
+D:\VSproject\DataReport\DataReport\bin\Debug\Newtonsoft.Json.xml
+D:\VSproject\DataReport\DataReport\obj\Debug\DataReport.csprojResolveAssemblyReference.cache
+D:\VSproject\DataReport\DataReport\obj\Debug\DataReport.UserControlUII.resources
+D:\VSproject\DataReport\DataReport\obj\Debug\DataReport.UserControUI.resources
+D:\VSproject\DataReport\DataReport\obj\Debug\DataReport.csproj.GenerateResource.Cache
+D:\VSproject\DataReport\DataReport\obj\Debug\DataReport.dll
+D:\VSproject\DataReport\DataReport\obj\Debug\DataReport.pdb
